@@ -1,0 +1,418 @@
+.checkoutPage {
+  min-height: 100vh;
+  background: #f7f5ef;
+  color: #182b3b;
+  padding: 0 6%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e8e2d7;
+}
+
+.brand {
+  font-family: Georgia, "Times New Roman", serif;
+  text-decoration: none;
+  color: #172c3c;
+  font-size: 25px;
+  letter-spacing: 4px;
+  font-weight: 700;
+}
+
+.brand span {
+  color: #c5a15c;
+}
+
+.secureText {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #77786f;
+}
+
+.secureText span {
+  color: #b08b42;
+  margin-right: 8px;
+}
+
+.pageIntro {
+  text-align: center;
+  padding: 55px 0 40px;
+}
+
+.pageIntro p {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #b08b42;
+  font-weight: 700;
+}
+
+.pageIntro h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 38px;
+  font-weight: 500;
+  margin: 15px 0;
+}
+
+.pageIntro span {
+  color: #89877e;
+  font-size: 13px;
+}
+
+.checkoutGrid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.8fr);
+  gap: 25px;
+  align-items: start;
+}
+
+.detailsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card,
+.summaryCard {
+  background: #ffffff;
+  border: 1px solid #eee8dd;
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.cardHeading {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.step {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f6f0e2;
+  color: #b08b42;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cardHeading h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  font-size: 21px;
+  margin: 0;
+}
+
+.cardHeading p {
+  font-size: 11px;
+  color: #969185;
+  margin: 7px 0 0;
+}
+
+.packageInfo {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.packageImage {
+  width: 130px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f1eadb;
+  flex-shrink: 0;
+}
+
+.packageImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imageFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #b08b42;
+  font-size: 28px;
+}
+
+.packageText h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 500;
+  margin: 7px 0;
+}
+
+.packageText p {
+  font-size: 12px;
+  color: #88867d;
+  margin: 0;
+}
+
+.destination {
+  color: #b08b42;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.formGroup label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #354654;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e6e0d5;
+  background: #fdfcf9;
+  border-radius: 7px;
+  color: #172c3c;
+  outline: none;
+  font-size: 13px;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #c5a15c;
+}
+
+.paymentNote {
+  background: #f2eee5;
+  border: 1px solid #e8dfcf;
+  padding: 18px;
+  border-radius: 10px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.paymentNote > span {
+  color: #b08b42;
+  font-size: 22px;
+}
+
+.paymentNote strong {
+  font-size: 12px;
+}
+
+.paymentNote p {
+  color: #888378;
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 7px 0 0;
+}
+
+.summaryCard {
+  position: sticky;
+  top: 20px;
+}
+
+.summaryEyebrow {
+  color: #b08b42;
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.summaryCard h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  font-weight: 500;
+  margin: 10px 0 25px;
+}
+
+.summaryLine {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 17px 0;
+  font-size: 12px;
+  color: #89877e;
+}
+
+.summaryLine strong {
+  color: #263948;
+  text-align: right;
+}
+
+.summaryDivider {
+  height: 1px;
+  background: #e8e2d7;
+  margin: 25px 0;
+}
+
+.totalLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.totalLine strong {
+  font-size: 25px;
+  color: #172c3c;
+}
+
+.payButton {
+  width: 100%;
+  border: 0;
+  background: #172c3c;
+  color: #ffffff;
+  border-radius: 7px;
+  padding: 16px;
+  margin-top: 25px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.payButton:hover {
+  background: #c5a15c;
+  color: #172c3c;
+}
+
+.payButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.payButton span {
+  font-size: 19px;
+}
+
+.terms {
+  color: #aaa397;
+  font-size: 10px;
+  line-height: 1.7;
+  text-align: center;
+  margin: 18px 0;
+}
+
+.trustRow {
+  display: flex;
+  justify-content: space-between;
+  color: #8a8d82;
+  font-size: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #eee8dd;
+}
+
+.errorMessage,
+.successMessage {
+  max-width: 1100px;
+  margin: 0 auto 20px;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.errorMessage {
+  background: #fff0ed;
+  color: #b33f34;
+}
+
+.successMessage {
+  background: #edf7ee;
+  color: #357c47;
+}
+
+.loading {
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #8a867b;
+  font-size: 14px;
+}
+
+.footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 45px 0 25px;
+  font-size: 10px;
+  color: #aaa397;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 850px) {
+  .checkoutGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .summaryCard {
+    position: static;
+  }
+}
+
+@media (max-width: 550px) {
+  .checkoutPage {
+    padding: 0 15px;
+  }
+
+  .header {
+    height: 70px;
+  }
+
+  .brand {
+    font-size: 19px;
+  }
+
+  .secureText {
+    font-size: 8px;
+  }
+
+  .pageIntro {
+    padding: 40px 0 30px;
+  }
+
+  .pageIntro h1 {
+    font-size: 29px;
+  }
+
+  .card,
+  .summaryCard {
+    padding: 20px;
+  }
+
+  .packageImage {
+    width: 90px;
+    height: 85px;
+  }
+
+  .packageText h3 {
+    font-size: 17px;
+  }
+}

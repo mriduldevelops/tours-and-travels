@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.11.0",
     "jose": "^6.2.15",
     "mongoose": "^9.11.4",
     "next": "16.4.3",
+    "razorpay": "^2.9.8",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },

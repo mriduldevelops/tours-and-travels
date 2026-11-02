@@ -111,7 +111,15 @@ export default function PackageDetailsPage() {
     : [
         "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85",
       ];
-  const totalPrice = selectedPackage.price * travelers;
+  const packageHighlights = selectedPackage.highlights?.length
+    ? selectedPackage.highlights
+    : [
+        "Carefully curated itinerary",
+        "Premium accommodation",
+        "Beautiful sightseeing locations",
+        "Comfortable transportation",
+      ];
+  const totalPrice = Number(selectedPackage.price || 0) * travelers;
 
   const today = new Date();
   const minimumDate = [
@@ -236,12 +244,7 @@ export default function PackageDetailsPage() {
               <h2 className="text-2xl font-bold">Package Highlights</h2>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                {[
-                  "Carefully curated itinerary",
-                  "Premium accommodation",
-                  "Beautiful sightseeing locations",
-                  "Comfortable transportation",
-                ].map((highlight) => (
+                {packageHighlights.map((highlight) => (
                   <div
                     key={highlight}
                     className="flex items-center gap-3 rounded-xl bg-white p-4"

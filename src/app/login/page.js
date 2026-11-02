@@ -46,7 +46,7 @@ export default function LoginPage() {
           ? next
           : data.user.role === "admin"
             ? "/admin/dashboard"
-            : "/my-bookings";
+            : "/";
 
       router.push(safeNext);
       router.refresh();

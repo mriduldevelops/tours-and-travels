@@ -1,0 +1,584 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: #1b3041;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.section {
+  background: #fff;
+  border: 1px solid #eae5dc;
+  border-radius: 14px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(23, 44, 60, 0.025);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.sectionIcon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #f6f0e3;
+  color: #b08b42;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+.sectionEyebrow {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #b08b42;
+  margin-bottom: 8px;
+}
+
+.sectionHeader h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+  color: #172c3c;
+}
+
+.sectionHeader p {
+  margin: 8px 0 0;
+  color: #8b887e;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.gridTwo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #344858;
+}
+
+.field input,
+.field select,
+.field textarea,
+.dynamicRow input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #e5dfd4;
+  background: #fdfcf9;
+  color: #172c3c;
+  border-radius: 8px;
+  padding: 14px 15px;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  transition:
+    border 0.2s,
+    box-shadow 0.2s;
+}
+
+.field input,
+.field select {
+  min-height: 46px;
+}
+
+.field textarea {
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.dynamicRow input:focus {
+  border-color: #c5a15c;
+  box-shadow: 0 0 0 3px rgba(197, 161, 92, 0.1);
+}
+
+.field input::placeholder,
+.field textarea::placeholder,
+.dynamicRow input::placeholder {
+  color: #b0aaa0;
+}
+
+.uploadArea {
+  min-height: 190px;
+  border: 1px dashed #cfc3ac;
+  background: #fcfaf5;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: center;
+  padding: 25px;
+  transition: 0.2s;
+}
+
+.uploadArea:hover {
+  border-color: #b08b42;
+  background: #f9f5ec;
+}
+
+.uploadArea input {
+  display: none;
+}
+
+.uploadIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #f1e8d5;
+  color: #b08b42;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 23px;
+}
+
+.uploadArea strong {
+  font-size: 13px;
+  color: #243949;
+}
+
+.uploadArea > span {
+  font-size: 10px;
+  color: #969084;
+  line-height: 1.5;
+}
+
+.uploadButton {
+  padding: 10px 18px;
+  background: #172c3c;
+  color: #fff !important;
+  border-radius: 6px;
+  font-size: 10px !important;
+  font-weight: 700;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  margin-top: 22px;
+}
+
+.imageCard {
+  height: 175px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f1eadb;
+  border: 1px solid #eee6d8;
+}
+
+.imageCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coverBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #172c3c;
+  color: #fff;
+  padding: 6px 9px;
+  border-radius: 4px;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.imageActions {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  gap: 5px;
+}
+
+.imageActions button {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #172c3c;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.imageActions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.imageActions .removeButton {
+  background: #fff0ed;
+  color: #b33f34;
+}
+
+.helperText {
+  color: #969084;
+  font-size: 10px;
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+.dynamicList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dynamicRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.dynamicRow:last-child {
+  margin-bottom: 0;
+}
+
+.dynamicRow input {
+  flex: 1;
+}
+
+.rowNumber {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  background: #f6f0e3;
+  color: #b08b42;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.removeButton {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  background: #fff4f1;
+  color: #b34c40;
+  border: 1px solid #f2e0da;
+  border-radius: 7px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.removeButton:hover {
+  background: #fbe2dc;
+}
+
+.addButton,
+.smallAddButton {
+  margin-top: 18px;
+  background: #f8f4eb;
+  border: 1px solid #e7dcc7;
+  color: #9c7939;
+  border-radius: 7px;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.addButton:hover,
+.smallAddButton:hover {
+  background: #f1e8d5;
+  border-color: #c5a15c;
+}
+
+.addButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.itineraryList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.itineraryCard {
+  padding: 22px;
+  border: 1px solid #e9e3d8;
+  background: #fdfcf9;
+  border-radius: 12px;
+}
+
+.itineraryTop {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.dayBadge {
+  width: 48px;
+  height: 52px;
+  flex-shrink: 0;
+  background: #172c3c;
+  color: #fff;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dayBadge span {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #d7b976;
+}
+
+.dayBadge strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.itineraryHeading {
+  flex: 1;
+}
+
+.itineraryHeading h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.itineraryHeading p {
+  font-size: 10px;
+  color: #969084;
+  margin: 6px 0 0;
+}
+
+.removeDayButton {
+  border: 0;
+  background: transparent;
+  color: #b34c40;
+  font-size: 10px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.listHeading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  color: #344858;
+  margin: 0 0 18px;
+}
+
+.inclusionDot,
+.exclusionDot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inclusionDot {
+  color: #3b8655;
+  background: #eaf5ed;
+}
+
+.exclusionDot {
+  color: #b34c40;
+  background: #fff0ed;
+}
+
+.smallAddButton {
+  padding: 9px 12px;
+  font-size: 10px;
+  margin-top: 10px;
+}
+
+.toggleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.toggleCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 18px;
+  background: #fdfcf9;
+  border: 1px solid #e9e3d8;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.toggleCard strong {
+  font-size: 12px;
+  color: #243949;
+}
+
+.toggleCard p {
+  font-size: 10px;
+  color: #969084;
+  margin: 7px 0 0;
+  line-height: 1.5;
+}
+
+.toggleCard input {
+  accent-color: #b08b42;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.formFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  padding: 22px 0 10px;
+}
+
+.cancelButton,
+.saveButton {
+  border-radius: 7px;
+  padding: 15px 22px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cancelButton {
+  border: 1px solid #e4ded3;
+  color: #74736c;
+  background: #fff;
+}
+
+.cancelButton:hover {
+  background: #f5f1e9;
+}
+
+.saveButton {
+  border: 1px solid #172c3c;
+  background: #172c3c;
+  color: #fff;
+}
+
+.saveButton:hover {
+  background: #b08b42;
+  border-color: #b08b42;
+  color: #172c3c;
+}
+
+.saveButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  padding: 13px 15px;
+  border: 1px solid #f2d9d4;
+  background: #fff0ed;
+  color: #b33f34;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (max-width: 750px) {
+  .section {
+    padding: 22px;
+  }
+
+  .gridTwo {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .imageGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toggleGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionHeader h2 {
+    font-size: 21px;
+  }
+
+  .sectionHeader {
+    gap: 12px;
+  }
+
+  .imageGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .itineraryCard {
+    padding: 15px;
+  }
+
+  .itineraryTop {
+    flex-wrap: wrap;
+  }
+
+  .removeDayButton {
+    margin-left: auto;
+  }
+
+  .formFooter {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .cancelButton,
+  .saveButton {
+    width: 100%;
+  }
+}

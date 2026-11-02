@@ -63,6 +63,11 @@ const packageSchema = new mongoose.Schema(
       min: 0,
     },
 
+    highlights: {
+      type: [String],
+      default: [],
+    },
+
     description: {
       type: String,
       required: true,

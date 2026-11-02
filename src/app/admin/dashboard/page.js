@@ -2,33 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styles from "./AdminDashboard.module.css";
-
-const emptyForm = {
-  title: "",
-  destination: "",
-  category: "Adventure",
-  duration: "",
-  price: "",
-  originalPrice: "",
-  description: "",
-  images: "",
-  itinerary: [],
-  inclusions: "",
-  exclusions: "",
-  featured: false,
-  active: true,
-};
-
-const categories = [
-  "Adventure",
-  "Honeymoon",
-  "Family",
-  "Luxury",
-  "Cultural",
-  "Wildlife",
-  "Beach",
-  "Pilgrimage",
-];
+import PackageForm from "./PackageForm";
 
 export default function AdminDashboard() {
   const [packages, setPackages] = useState([]);
@@ -38,11 +12,10 @@ export default function AdminDashboard() {
     totalUsers: 0,
   });
 
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
@@ -97,7 +70,7 @@ export default function AdminDashboard() {
 
   function openCreateModal() {
     setEditingId(null);
-    setForm(emptyForm);
+    setForm(null);
     setError("");
     setModalOpen(true);
   }
@@ -113,10 +86,11 @@ export default function AdminDashboard() {
       price: item.price ?? "",
       originalPrice: item.originalPrice ?? "",
       description: item.description || "",
-      images: (item.images || []).join("\n"),
+      images: item.images || [],
+      highlights: item.highlights || [],
       itinerary: item.itinerary || [],
-      inclusions: (item.inclusions || []).join("\n"),
-      exclusions: (item.exclusions || []).join("\n"),
+      inclusions: item.inclusions || [],
+      exclusions: item.exclusions || [],
       featured: Boolean(item.featured),
       active: item.active !== false,
     });
@@ -125,33 +99,22 @@ export default function AdminDashboard() {
     setModalOpen(true);
   }
 
-  function updateForm(field, value) {
-    setForm((previous) => ({
-      ...previous,
-      [field]: value,
-    }));
-  }
-
-  async function savePackage(event) {
-    event.preventDefault();
-
-    setSaving(true);
+  async function savePackage(payload) {
     setError("");
     setNotice("");
 
     try {
-      const endpoint = editingId
+      const url = editingId
         ? `/api/admin/packages/${editingId}`
         : "/api/admin/packages";
-
       const method = editingId ? "PATCH" : "POST";
 
-      const response = await fetch(endpoint, {
+      const response = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -161,7 +124,7 @@ export default function AdminDashboard() {
       }
 
       setModalOpen(false);
-      setForm(emptyForm);
+      setForm(null);
       setEditingId(null);
 
       setNotice(
@@ -172,9 +135,7 @@ export default function AdminDashboard() {
 
       await loadDashboard();
     } catch (err) {
-      setError(err.message || "Unable to save package");
-    } finally {
-      setSaving(false);
+      throw new Error(err.message || "Unable to save package");
     }
   }
 
@@ -489,192 +450,27 @@ export default function AdminDashboard() {
 
               <button
                 className={styles.closeButton}
-                onClick={() => setModalOpen(false)}
+                type="button"
+                aria-label="Close package form"
+                onClick={() => {
+                  setModalOpen(false);
+                  setEditingId(null);
+                  setForm(null);
+                }}
               >
                 ×
               </button>
             </div>
 
-            <form onSubmit={savePackage}>
-              <div className={styles.formGrid}>
-                <div className={styles.formGroup}>
-                  <label>Package Name *</label>
-                  <input
-                    required
-                    value={form.title}
-                    onChange={(e) => updateForm("title", e.target.value)}
-                    placeholder="e.g. Royal Rajasthan Escape"
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Destination *</label>
-                  <input
-                    required
-                    value={form.destination}
-                    onChange={(e) => updateForm("destination", e.target.value)}
-                    placeholder="e.g. Jaipur, Rajasthan"
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Category</label>
-                  <select
-                    value={form.category}
-                    onChange={(e) => updateForm("category", e.target.value)}
-                  >
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Duration *</label>
-                  <input
-                    required
-                    value={form.duration}
-                    onChange={(e) => updateForm("duration", e.target.value)}
-                    placeholder="e.g. 5 Days / 4 Nights"
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Price (₹) *</label>
-                  <input
-                    type="number"
-                    min="0"
-                    required
-                    value={form.price}
-                    onChange={(e) => updateForm("price", e.target.value)}
-                    placeholder="25000"
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Original Price (₹)</label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={form.originalPrice}
-                    onChange={(e) =>
-                      updateForm("originalPrice", e.target.value)
-                    }
-                    placeholder="30000"
-                  />
-                </div>
-
-                <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                  <label>Description *</label>
-                  <textarea
-                    required
-                    rows="4"
-                    value={form.description}
-                    onChange={(e) => updateForm("description", e.target.value)}
-                    placeholder="Describe this travel experience..."
-                  />
-                </div>
-
-                <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                  <label>Image URLs (one URL per line)</label>
-                  <textarea
-                    rows="3"
-                    value={form.images}
-                    onChange={(e) => updateForm("images", e.target.value)}
-                    placeholder={
-                      "https://example.com/image1.jpg\nhttps://example.com/image2.jpg"
-                    }
-                  />
-                </div>
-
-                <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                  <label>Inclusions (one per line)</label>
-                  <textarea
-                    rows="3"
-                    value={form.inclusions}
-                    onChange={(e) => updateForm("inclusions", e.target.value)}
-                    placeholder={
-                      "Hotel accommodation\nBreakfast\nAirport transfers"
-                    }
-                  />
-                </div>
-
-                <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                  <label>Exclusions (one per line)</label>
-                  <textarea
-                    rows="3"
-                    value={form.exclusions}
-                    onChange={(e) => updateForm("exclusions", e.target.value)}
-                    placeholder={"Flight tickets\nPersonal expenses"}
-                  />
-                </div>
-
-                <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                  <label>Itinerary (JSON format)</label>
-                  <textarea
-                    rows="5"
-                    value={JSON.stringify(form.itinerary, null, 2)}
-                    onChange={(e) => {
-                      try {
-                        updateForm("itinerary", JSON.parse(e.target.value));
-                      } catch {
-                        // Keep the previous valid itinerary while typing.
-                      }
-                    }}
-                    placeholder='[{"day":1,"title":"Arrival","description":"Check in"}]'
-                  />
-                  <small>
-                    Enter valid JSON with day, title, and description.
-                  </small>
-                </div>
-              </div>
-
-              <div className={styles.toggleRow}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={form.featured}
-                    onChange={(e) => updateForm("featured", e.target.checked)}
-                  />
-                  Featured package
-                </label>
-
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={form.active}
-                    onChange={(e) => updateForm("active", e.target.checked)}
-                  />
-                  Active / Published
-                </label>
-              </div>
-
-              {error && <div className={styles.errorMessage}>{error}</div>}
-
-              <div className={styles.modalActions}>
-                <button
-                  type="button"
-                  className={styles.secondaryButton}
-                  onClick={() => setModalOpen(false)}
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  className={styles.primaryButton}
-                  disabled={saving}
-                >
-                  {saving
-                    ? "Saving..."
-                    : editingId
-                      ? "Save Changes"
-                      : "Create Package"}
-                </button>
-              </div>
-            </form>
+            <PackageForm
+              initialData={editingId ? form : null}
+              onCancel={() => {
+                setModalOpen(false);
+                setEditingId(null);
+                setForm(null);
+              }}
+              onSubmit={savePackage}
+            />
           </div>
         </div>
       )}
