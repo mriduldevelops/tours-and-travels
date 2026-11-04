@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import TravelLoader from "@/components/TravelLoader";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -85,7 +86,13 @@ function SuccessContent() {
 
 export default function BookingSuccessPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-[#f7f5ef] px-5">
+          <TravelLoader label="Confirming your journey" />
+        </main>
+      }
+    >
       <SuccessContent />
     </Suspense>
   );

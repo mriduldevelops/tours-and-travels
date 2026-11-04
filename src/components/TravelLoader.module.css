@@ -1,0 +1,141 @@
+.loader {
+  display: flex;
+  min-height: 120px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  color: #777267;
+  text-align: center;
+}
+
+.visual {
+  position: relative;
+  display: grid;
+  width: 66px;
+  height: 66px;
+  flex: 0 0 auto;
+  place-items: center;
+  filter: drop-shadow(0 5px 8px rgb(27 38 56 / 10%));
+}
+
+.ring,
+.innerRing {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.ring {
+  inset: 2px;
+  border: 2px solid #e9e4da;
+  border-top-color: #c49a55;
+  border-right-color: #1b2638;
+  animation: loader-spin 1.15s linear infinite;
+}
+
+.ring::after {
+  position: absolute;
+  top: 5px;
+  right: 4px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid #faf9f6;
+  border-radius: 50%;
+  background: #c49a55;
+  content: "";
+}
+
+.innerRing {
+  inset: 10px;
+  border: 1px dashed #ddcfb1;
+  animation: loader-spin 7s linear infinite reverse;
+}
+
+.spark {
+  position: absolute;
+  top: 8px;
+  left: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c49a55;
+  animation: loader-twinkle 1.5s ease-in-out infinite;
+}
+
+.plane {
+  width: 21px;
+  height: 21px;
+  color: #1b2638;
+  transform: rotate(-8deg);
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.compact {
+  min-height: 0;
+  flex-direction: row;
+  gap: 9px;
+  color: inherit;
+}
+
+.compact .visual {
+  width: 20px;
+  height: 20px;
+  filter: none;
+}
+
+.compact .ring {
+  inset: 1px;
+  border-width: 2px;
+  border-color: rgb(255 255 255 / 38%);
+  border-top-color: #e5bf74;
+  border-right-color: #fff;
+}
+
+.compact .ring::after,
+.compact .innerRing,
+.compact .spark,
+.compact .plane {
+  display: none;
+}
+
+.compact .label {
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@keyframes loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-twinkle {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.65);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring,
+  .innerRing,
+  .spark {
+    animation: none;
+  }
+}

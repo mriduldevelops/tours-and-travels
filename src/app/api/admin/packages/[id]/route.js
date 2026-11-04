@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Package from "@/models/Package";
 import { getCurrentUser } from "@/lib/auth";
+import { isValidFutureTripDate } from "@/lib/trip-date";
 
 // Convert text into a URL-friendly slug
 function createSlug(value = "") {
@@ -20,6 +21,7 @@ function normalizePackageBody(body = {}) {
     destination: String(body.destination || "").trim(),
     category: String(body.category || "").trim(),
     duration: String(body.duration || "").trim(),
+    tripDate: String(body.tripDate || "").trim(),
 
     price: Number(body.price || 0),
     originalPrice:
@@ -127,7 +129,29 @@ export async function PATCH(request, { params }) {
 
     const { id } = await params;
     const body = await request.json();
-    const packageData = normalizePackageBody(body);
+    const existingPackage = await Package.findById(id);
+
+    if (!existingPackage) {
+      return NextResponse.json(
+        { message: "Package not found." },
+        { status: 404 },
+      );
+    }
+
+    const packageData = normalizePackageBody({
+      ...existingPackage.toObject(),
+      ...body,
+    });
+
+    if (
+      body.tripDate !== undefined &&
+      !isValidFutureTripDate(packageData.tripDate)
+    ) {
+      return NextResponse.json(
+        { message: "Trip date must be a valid date today or later." },
+        { status: 400 },
+      );
+    }
 
     // Required field validation
     if (
@@ -170,16 +194,6 @@ export async function PATCH(request, { params }) {
       return NextResponse.json(
         { message: "Original price cannot be less than the package price." },
         { status: 400 },
-      );
-    }
-
-    // Check if package exists
-    const existingPackage = await Package.findById(id);
-
-    if (!existingPackage) {
-      return NextResponse.json(
-        { message: "Package not found." },
-        { status: 404 },
       );
     }
 

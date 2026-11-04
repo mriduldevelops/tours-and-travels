@@ -51,6 +51,11 @@ const packageSchema = new mongoose.Schema(
       required: true,
     },
 
+    tripDate: {
+      type: String,
+      default: "",
+    },
+
     price: {
       type: Number,
       required: true,
@@ -107,6 +112,13 @@ const packageSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+if (
+  mongoose.models.Package &&
+  !mongoose.models.Package.schema.path("tripDate")
+) {
+  mongoose.deleteModel("Package");
+}
 
 const Package =
   mongoose.models.Package || mongoose.model("Package", packageSchema);

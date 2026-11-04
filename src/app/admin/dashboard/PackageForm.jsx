@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import TravelLoader from "@/components/TravelLoader";
 import styles from "./PackageForm.module.css";
 
 const defaultForm = {
@@ -8,6 +9,7 @@ const defaultForm = {
   destination: "",
   category: "",
   duration: "",
+  tripDate: "",
   price: "",
   originalPrice: "",
   description: "",
@@ -81,6 +83,12 @@ export default function PackageForm({
   const [saving, setSaving] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [formError, setFormError] = useState("");
+  const today = new Date();
+  const minimumTripDate = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0"),
+  ].join("-");
 
   useEffect(() => {
     setForm(normalizeForm(initialData));
@@ -301,6 +309,11 @@ export default function PackageForm({
       return;
     }
 
+    if (!form.tripDate) {
+      setFormError("Please select a trip date.");
+      return;
+    }
+
     if (!form.price || Number(form.price) <= 0) {
       setFormError("Please enter a valid package price.");
       return;
@@ -418,6 +431,17 @@ export default function PackageForm({
           </div>
 
           <div className={styles.field}>
+            <label>Trip Date *</label>
+            <input
+              type="date"
+              min={minimumTripDate}
+              value={form.tripDate}
+              onChange={(e) => updateField("tripDate", e.target.value)}
+              required
+            />
+          </div>
+
+          <div className={styles.field}>
             <label>Price per Traveler (₹) *</label>
             <input
               type="number"
@@ -479,18 +503,22 @@ export default function PackageForm({
 
           <div className={styles.uploadIcon}>↑</div>
 
-          <strong>
-            {uploading
-              ? "Uploading images to Cloudinary..."
-              : "Click to upload package images"}
-          </strong>
+          {uploading ? (
+            <TravelLoader compact label="Uploading your package photos..." />
+          ) : (
+            <strong>Click to upload package images</strong>
+          )}
 
           <span>
             JPG, PNG, WEBP · Maximum 10 MB per image · Up to 10 images
           </span>
 
           <span className={styles.uploadButton}>
-            {uploading ? "Please wait..." : "Choose Images"}
+            {uploading ? (
+              <TravelLoader compact label="Please wait..." />
+            ) : (
+              "Choose Images"
+            )}
           </span>
         </label>
 
@@ -813,11 +841,13 @@ export default function PackageForm({
           className={styles.saveButton}
           disabled={saving || uploading}
         >
-          {saving
-            ? "Saving Package..."
-            : initialData
-              ? "Save Package Changes →"
-              : "Create New Package →"}
+          {saving ? (
+            <TravelLoader compact label="Saving package..." />
+          ) : initialData ? (
+            "Save Package Changes →"
+          ) : (
+            "Create New Package →"
+          )}
         </button>
       </div>
     </form>

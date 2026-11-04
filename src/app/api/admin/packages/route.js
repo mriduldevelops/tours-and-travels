@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Package from "@/models/Package";
 import { getCurrentUser } from "@/lib/auth";
+import { isValidFutureTripDate } from "@/lib/trip-date";
 
 // Convert text into a URL-friendly slug
 function createSlug(value = "") {
@@ -21,6 +22,7 @@ function normalizePackageBody(body = {}) {
     destination: String(body.destination || "").trim(),
     category: String(body.category || "").trim(),
     duration: String(body.duration || "").trim(),
+    tripDate: String(body.tripDate || "").trim(),
 
     price: Number(body.price || 0),
     originalPrice:
@@ -121,13 +123,21 @@ export async function POST(request) {
       !packageData.destination ||
       !packageData.category ||
       !packageData.duration ||
+      !packageData.tripDate ||
       !packageData.description
     ) {
       return NextResponse.json(
         {
           message:
-            "Title, destination, category, duration, and description are required.",
+            "Title, destination, category, duration, trip date, and description are required.",
         },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidFutureTripDate(packageData.tripDate)) {
+      return NextResponse.json(
+        { message: "Trip date must be a valid date today or later." },
         { status: 400 }
       );
     }

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import BrandLogo from "@/components/BrandLogo";
+import TravelLoader from "@/components/TravelLoader";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -90,12 +92,7 @@ export default function LoginPage() {
       {/* Form */}
       <div className="flex w-full items-center justify-center px-5 py-12 lg:w-1/2">
         <div className="w-full max-w-md">
-          <a
-            href="/"
-            className="text-2xl font-bold tracking-tight text-[#1b2638]"
-          >
-            <span className="text-[#c49a55]">W</span>anderlust.
-          </a>
+          <BrandLogo />
 
           <div className="mt-10">
             <p className="text-xs font-bold uppercase tracking-[3px] text-[#c49a55]">
@@ -154,7 +151,11 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full rounded-full bg-[#1b2638] py-4 font-bold text-white transition hover:bg-[#c49a55] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Logging in..." : "Login →"}
+              {loading ? (
+                <TravelLoader compact label="Signing you in..." />
+              ) : (
+                "Login →"
+              )}
             </button>
           </form>
 
@@ -169,7 +170,7 @@ export default function LoginPage() {
           </p>
 
           <p className="mt-8 text-center text-xs text-gray-400">
-            © 2026 Wanderlust Travel
+            © 2026 Manchale Travelers
           </p>
         </div>
       </div>

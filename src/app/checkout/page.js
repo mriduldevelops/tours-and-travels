@@ -2,18 +2,26 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import BrandLogo from "@/components/BrandLogo";
+import TravelLoader from "@/components/TravelLoader";
 import styles from "./Checkout.module.css";
+import { isValidFutureTripDate } from "@/lib/trip-date";
+
+const formatTripDate = (date) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const packageId = searchParams.get("packageId");
-  const initialDate = searchParams.get("date") || "";
   const initialTravelers = Number(searchParams.get("travelers") || 1);
 
   const [travelPackage, setTravelPackage] = useState(null);
-  const [travelDate, setTravelDate] = useState(initialDate);
   const [travelers, setTravelers] = useState(
     Number.isInteger(initialTravelers) &&
       initialTravelers >= 1 &&
@@ -86,17 +94,8 @@ function CheckoutContent() {
       return;
     }
 
-    if (!travelDate) {
-      showMessage("Please select your travel date");
-      return;
-    }
-
-    const selectedDate = new Date(`${travelDate}T00:00:00`);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (Number.isNaN(selectedDate.getTime()) || selectedDate < today) {
-      showMessage("Please select a valid future travel date");
+    if (!isValidFutureTripDate(travelPackage.tripDate)) {
+      showMessage("This package does not have an upcoming trip date.");
       return;
     }
 
@@ -125,7 +124,6 @@ function CheckoutContent() {
         },
         body: JSON.stringify({
           packageId,
-          travelDate,
           travelers: Number(travelers),
         }),
       });
@@ -136,7 +134,7 @@ function CheckoutContent() {
         if (orderResponse.status === 401) {
           router.push(
             `/login?next=${encodeURIComponent(
-              `/checkout?packageId=${packageId}&date=${travelDate}&travelers=${travelers}`,
+              `/checkout?packageId=${packageId}&travelers=${travelers}`,
             )}`,
           );
           return;
@@ -149,7 +147,7 @@ function CheckoutContent() {
         key: orderData.keyId,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: "Travelé",
+        name: "Manchale Travelers",
         description: orderData.packageTitle,
         order_id: orderData.orderId,
 
@@ -237,7 +235,11 @@ function CheckoutContent() {
   }
 
   if (loadingPackage) {
-    return <div className={styles.loading}>Loading checkout details...</div>;
+    return (
+      <div className={styles.loading}>
+        <TravelLoader label="Preparing your secure checkout" />
+      </div>
+    );
   }
 
   if (!travelPackage) {
@@ -249,9 +251,7 @@ function CheckoutContent() {
   return (
     <main className={styles.checkoutPage}>
       <header className={styles.header}>
-        <a href="/" className={styles.brand}>
-          TRAVEL<span>É</span>
-        </a>
+        <BrandLogo />
 
         <div className={styles.secureText}>
           <span>♧</span> SECURE CHECKOUT
@@ -314,19 +314,17 @@ function CheckoutContent() {
               <span className={styles.step}>02</span>
               <div>
                 <h2>Travel Details</h2>
-                <p>Choose your preferred date and group size</p>
+                <p>Scheduled trip date and group size</p>
               </div>
             </div>
 
             <div className={styles.formGroup}>
-              <label>Travel Date</label>
-              <input
-                type="date"
-                value={travelDate}
-                min={new Date().toLocaleDateString("en-CA")}
-                onChange={(e) => setTravelDate(e.target.value)}
-                required
-              />
+              <label>Trip Date</label>
+              <p>
+                {isValidFutureTripDate(travelPackage.tripDate)
+                  ? formatTripDate(travelPackage.tripDate)
+                  : "No upcoming trip date scheduled"}
+              </p>
             </div>
 
             <div className={styles.formGroup}>
@@ -376,7 +374,11 @@ function CheckoutContent() {
 
           <div className={styles.summaryLine}>
             <span>Travel date</span>
-            <strong>{travelDate || "Not selected"}</strong>
+            <strong>
+              {isValidFutureTripDate(travelPackage.tripDate)
+                ? formatTripDate(travelPackage.tripDate)
+                : "No upcoming trip date scheduled"}
+            </strong>
           </div>
 
           <div className={styles.summaryDivider} />
@@ -389,10 +391,16 @@ function CheckoutContent() {
           <button
             className={styles.payButton}
             onClick={handlePayment}
-            disabled={paying}
+            disabled={paying || !isValidFutureTripDate(travelPackage.tripDate)}
           >
-            {paying ? "Processing..." : "Proceed to Payment"}
-            <span>→</span>
+            {paying ? (
+              <TravelLoader compact label="Securing your payment..." />
+            ) : (
+              <>
+                Proceed to Payment
+                <span>→</span>
+              </>
+            )}
           </button>
 
           <p className={styles.terms}>
@@ -409,7 +417,8 @@ function CheckoutContent() {
       </section>
 
       <footer className={styles.footer}>
-        © {new Date().getFullYear()} Travelé. Crafted for memorable journeys.
+        © {new Date().getFullYear()} Manchale Travelers. Crafted for memorable
+        journeys.
       </footer>
     </main>
   );
@@ -417,12 +426,8 @@ function CheckoutContent() {
 
 export default function CheckoutPage() {
   return (
-    <Suspense
-      fallback={<div className={stylesFallback}>Loading checkout...</div>}
-    >
+    <Suspense fallback={<div className={styles.loading}><TravelLoader label="Preparing checkout" /></div>}>
       <CheckoutContent />
     </Suspense>
   );
 }
-
-const stylesFallback = "checkout-loading";

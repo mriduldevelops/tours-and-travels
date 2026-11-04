@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import BrandLogo from "@/components/BrandLogo";
+import TravelLoader from "@/components/TravelLoader";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -113,9 +115,7 @@ export default function ProfilePage() {
     <main className="min-h-screen bg-[#faf9f6] text-[#1b2638]">
       <header className="border-b border-gray-100 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5 md:px-10">
-          <a href="/" className="text-2xl font-bold tracking-tight">
-            <span className="text-[#c49a55]">W</span>anderlust.
-          </a>
+          <BrandLogo />
           <a
             href="/"
             className="text-sm font-semibold text-gray-600 transition hover:text-[#c49a55]"
@@ -154,9 +154,7 @@ export default function ProfilePage() {
 
         <div className="mt-8 rounded-2xl bg-white p-6 shadow-sm md:p-8">
           {loading ? (
-            <p className="py-8 text-center text-sm text-gray-500">
-              Loading your profile...
-            </p>
+            <TravelLoader label="Getting your profile ready" />
           ) : profile ? (
             <>
               <div className="mb-8 flex items-center gap-4 border-b border-gray-100 pb-6">
@@ -217,7 +215,11 @@ export default function ProfilePage() {
                   disabled={saving}
                   className="w-full rounded-full bg-[#1b2638] py-3.5 font-bold text-white transition hover:bg-[#c49a55] disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {saving ? "Saving changes..." : "Save changes"}
+                  {saving ? (
+                    <TravelLoader compact label="Saving changes..." />
+                  ) : (
+                    "Save changes"
+                  )}
                 </button>
               </form>
 
@@ -228,7 +230,11 @@ export default function ProfilePage() {
                   disabled={loggingOut}
                   className="w-full rounded-full border border-red-200 px-5 py-3 font-semibold text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {loggingOut ? "Logging out..." : "Logout"}
+                  {loggingOut ? (
+                    <TravelLoader compact label="Logging out..." />
+                  ) : (
+                    "Logout"
+                  )}
                 </button>
               </div>
             </>

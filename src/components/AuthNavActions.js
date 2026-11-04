@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import NavLinks from "@/components/NavLinks";
+import TravelLoader from "@/components/TravelLoader";
 
 export default function AuthNavActions({ variant = "packages" }) {
   const [status, setStatus] = useState("loading");
@@ -64,12 +66,6 @@ export default function AuthNavActions({ variant = "packages" }) {
   }, [menuOpen]);
 
   const containerClassName = "flex items-center gap-3";
-  const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/packages", label: "Packages" },
-    { href: "/#destinations", label: "Destinations" },
-    { href: "/#reviews", label: "Reviews" },
-  ];
   const initials = user?.name
     ?.split(/\s+/)
     .map((part) => part[0])
@@ -79,7 +75,9 @@ export default function AuthNavActions({ variant = "packages" }) {
 
   const desktopActions =
     status === "loading" ? (
-      <div className="hidden h-10 w-10 md:block" aria-label="Loading account" />
+      <div className="hidden h-10 w-10 items-center justify-center md:flex">
+        <TravelLoader compact label="Checking your account" hideLabel />
+      </div>
     ) : status === "error" ? (
       <div className="hidden text-right text-xs text-red-600 md:block" role="status">
       Account unavailable<span className="sr-only">: {error}</span>
@@ -182,16 +180,7 @@ export default function AuthNavActions({ variant = "packages" }) {
             </div>
 
             <nav className="flex flex-col gap-1 border-b border-gray-100 py-5">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-lg px-3 py-3 font-medium transition hover:bg-[#faf9f6] hover:text-[#c49a55]"
-                >
-                  {link.label}
-                </a>
-              ))}
+              <NavLinks mobile onNavigate={() => setMenuOpen(false)} />
             </nav>
 
             {status === "signed-in" ? (
@@ -237,9 +226,9 @@ export default function AuthNavActions({ variant = "packages" }) {
                 </a>
               </div>
             ) : (
-              <p className="mt-5 text-sm text-gray-500">
-                Loading account...
-              </p>
+              <div className="mt-5">
+                <TravelLoader compact label="Checking your account" />
+              </div>
             )}
           </aside>
         </div>,

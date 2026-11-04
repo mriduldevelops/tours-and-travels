@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import BrandLogo from "@/components/BrandLogo";
+import TravelLoader from "@/components/TravelLoader";
 import styles from "./AdminDashboard.module.css";
 import PackageForm from "./PackageForm";
 
@@ -83,6 +85,7 @@ export default function AdminDashboard() {
       destination: item.destination || "",
       category: item.category || "Adventure",
       duration: item.duration || "",
+      tripDate: item.tripDate || "",
       price: item.price ?? "",
       originalPrice: item.originalPrice ?? "",
       description: item.description || "",
@@ -206,15 +209,7 @@ export default function AdminDashboard() {
   return (
     <div className={styles.dashboard}>
       <aside className={styles.sidebar}>
-        <div className={styles.brand}>
-          <span className={styles.brandMark}>✦</span>
-          <div>
-            <h2>
-              TRAVEL<span>É</span>
-            </h2>
-            <p>ADMIN CONSOLE</p>
-          </div>
-        </div>
+        <BrandLogo variant="light" className={styles.brand} />
 
         <div className={styles.sidebarLabel}>WORKSPACE</div>
 
@@ -355,7 +350,7 @@ export default function AdminDashboard() {
                 {loading ? (
                   <tr>
                     <td colSpan="6" className={styles.emptyState}>
-                      Loading packages...
+                      <TravelLoader label="Gathering your package collection" />
                     </td>
                   </tr>
                 ) : filteredPackages.length === 0 ? (
@@ -433,7 +428,7 @@ export default function AdminDashboard() {
         </section>
 
         <footer className={styles.footer}>
-          <span>TRAVELÉ ADMIN CONSOLE</span>
+          <span>MANCHALE TRAVELERS ADMIN CONSOLE</span>
           <span>Manage. Curate. Explore.</span>
         </footer>
       </main>

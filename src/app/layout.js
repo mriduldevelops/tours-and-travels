@@ -1,9 +1,9 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Wanderlust | Premium Tour & Travel",
+  title: "Manchale Travelers | Curated Travel Experiences",
   description:
-    "Discover luxury tour packages, explore destinations, and book your next unforgettable travel experience.",
+    "Discover curated journeys, explore remarkable destinations, and book your next unforgettable travel experience with Manchale Travelers.",
 };
 
 export default function RootLayout({ children }) {

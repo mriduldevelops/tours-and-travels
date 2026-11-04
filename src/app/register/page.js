@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import BrandLogo from "@/components/BrandLogo";
+import TravelLoader from "@/components/TravelLoader";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -92,19 +94,14 @@ export default function RegisterPage() {
       {/* Form */}
       <div className="flex w-full items-center justify-center px-5 py-12 lg:w-1/2">
         <div className="w-full max-w-md">
-          <a
-            href="/"
-            className="text-2xl font-bold tracking-tight text-[#1b2638]"
-          >
-            <span className="text-[#c49a55]">W</span>anderlust.
-          </a>
+          <BrandLogo />
 
           <div className="mt-10">
             <p className="text-xs font-bold uppercase tracking-[3px] text-[#c49a55]">
               Create Account
             </p>
 
-            <h2 className="mt-3 text-3xl font-bold">Join Wanderlust</h2>
+            <h2 className="mt-3 text-3xl font-bold">Join Manchale Travelers</h2>
 
             <p className="mt-3 text-sm text-gray-500">
               Create an account to book your dream vacation.
@@ -196,7 +193,11 @@ export default function RegisterPage() {
               disabled={loading}
               className="w-full rounded-full bg-[#1b2638] py-4 font-bold text-white transition hover:bg-[#c49a55] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Creating Account..." : "Create Account →"}
+              {loading ? (
+                <TravelLoader compact label="Creating your account..." />
+              ) : (
+                "Create Account →"
+              )}
             </button>
           </form>
 
@@ -211,7 +212,7 @@ export default function RegisterPage() {
           </p>
 
           <p className="mt-8 text-center text-xs text-gray-400">
-            © 2026 Wanderlust Travel
+            © 2026 Manchale Travelers
           </p>
         </div>
       </div>

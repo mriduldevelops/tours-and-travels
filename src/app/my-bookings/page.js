@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import TravelLoader from "@/components/TravelLoader";
 import styles from "./MyBookings.module.css";
 
 export default function MyBookingsPage() {
@@ -70,7 +71,11 @@ export default function MyBookingsPage() {
         <span>All your travel reservations in one place.</span>
       </section>
 
-      {loading && <div className={styles.empty}>Loading your bookings...</div>}
+      {loading && (
+        <div className={styles.empty}>
+          <TravelLoader label="Gathering your trip details" />
+        </div>
+      )}
 
       {error && <div className={styles.error}>{error}</div>}
 

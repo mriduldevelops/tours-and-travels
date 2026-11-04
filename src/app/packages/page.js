@@ -2,6 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import AuthNavActions from "@/components/AuthNavActions";
+import BrandLogo from "@/components/BrandLogo";
+import NavLinks from "@/components/NavLinks";
+import TravelLoader from "@/components/TravelLoader";
 
 const formatPrice = (price) => `₹${price.toLocaleString("en-IN")}`;
 
@@ -16,8 +19,7 @@ export default function PackagesPage() {
   const [maxPrice, setMaxPrice] = useState(100000);
   const [sortBy, setSortBy] = useState("recommended");
 
-  const [travelDate, setTravelDate] = useState("");
-  const [travelers, setTravelers] = useState("2");
+  const [travelers, setTravelers] = useState("1");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -64,8 +66,7 @@ export default function PackagesPage() {
     const params = new URLSearchParams(window.location.search);
 
     setSearch(params.get("destination") || "");
-    setTravelDate(params.get("date") || "");
-    setTravelers(params.get("travelers") || "2");
+    setTravelers(params.get("travelers") || "1");
   }, []);
 
   const destinations = useMemo(() => {
@@ -128,23 +129,10 @@ export default function PackagesPage() {
       {/* Navbar */}
       <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-lg">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-10">
-          <a href="/" className="text-2xl font-bold tracking-tight">
-            <span className="text-[#c49a55]">W</span>anderlust.
-          </a>
+          <BrandLogo />
 
           <div className="hidden gap-8 text-sm font-medium md:flex">
-            <a href="/" className="hover:text-[#c49a55]">
-              Home
-            </a>
-            <a href="/packages" className="text-[#c49a55]">
-              Packages
-            </a>
-            <a href="/#destinations" className="hover:text-[#c49a55]">
-              Destinations
-            </a>
-            <a href="/#reviews" className="hover:text-[#c49a55]">
-              Reviews
-            </a>
+            <NavLinks />
           </div>
 
           <AuthNavActions variant="packages" />
@@ -188,7 +176,7 @@ export default function PackagesPage() {
       <section className="mx-auto max-w-7xl px-5 py-12 md:px-10">
         {/* Search Bar */}
         <div className="mb-10 rounded-2xl bg-white p-5 shadow-sm md:p-6">
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500">
                 Search Destination
@@ -200,20 +188,6 @@ export default function PackagesPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-[#c49a55]"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500">
-                Travel Date
-              </label>
-
-              <input
-                type="date"
-                min={new Date().toISOString().split("T")[0]}
-                value={travelDate}
-                onChange={(e) => setTravelDate(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#c49a55]"
               />
             </div>
 
@@ -347,7 +321,7 @@ export default function PackagesPage() {
           <div className="lg:col-span-3">
             {loading ? (
               <div className="flex min-h-[400px] items-center justify-center rounded-2xl border border-gray-100 bg-white p-8 text-center text-gray-500">
-                Loading packages...
+                <TravelLoader label="Finding your next adventure" />
               </div>
             ) : loadError ? (
               <div
@@ -414,9 +388,9 @@ export default function PackagesPage() {
                           </div>
 
                           <a
-                            href={`/packages/${pkg._id}?date=${encodeURIComponent(
-                              travelDate,
-                            )}&travelers=${encodeURIComponent(travelers)}`}
+                            href={`/packages/${pkg._id}?travelers=${encodeURIComponent(
+                              travelers,
+                            )}`}
                             className="rounded-full bg-[#1b2638] px-4 py-3 text-xs font-semibold text-white transition hover:bg-[#c49a55]"
                           >
                             View Details →
@@ -480,9 +454,7 @@ export default function PackagesPage() {
       <footer className="bg-[#111a28] px-5 py-10 text-white md:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
-            <a href="/" className="text-2xl font-bold">
-              <span className="text-[#c49a55]">W</span>anderlust.
-            </a>
+            <BrandLogo variant="light" />
 
             <div className="flex flex-wrap gap-6 text-sm text-white/50">
               <a href="/" className="hover:text-[#c49a55]">
@@ -501,7 +473,7 @@ export default function PackagesPage() {
           </div>
 
           <div className="mt-8 border-t border-white/10 pt-6 text-center text-xs text-white/40">
-            © 2026 Wanderlust Travel. All rights reserved.
+            © 2026 Manchale Travelers. All rights reserved.
           </div>
         </div>
       </footer>

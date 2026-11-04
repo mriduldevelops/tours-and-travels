@@ -4,6 +4,7 @@ import Package from "@/models/Package";
 import Booking from "@/models/Booking";
 import razorpay from "@/lib/razorpay";
 import { getCurrentUser } from "@/lib/auth";
+import { isValidFutureTripDate } from "@/lib/trip-date";
 
 export async function POST(request) {
   try {
@@ -18,11 +19,11 @@ export async function POST(request) {
 
     const body = await request.json();
 
-    const { packageId, travelDate, travelers } = body;
+    const { packageId, travelers } = body;
 
-    if (!packageId || !travelDate || !travelers) {
+    if (!packageId || !travelers) {
       return NextResponse.json(
-        { message: "Package, travel date, and travelers are required" },
+        { message: "Package and travelers are required" },
         { status: 400 },
       );
     }
@@ -36,28 +37,6 @@ export async function POST(request) {
     ) {
       return NextResponse.json(
         { message: "Travelers must be between 1 and 20" },
-        { status: 400 },
-      );
-    }
-
-    const parsedDate = new Date(`${travelDate}T00:00:00.000Z`);
-
-    if (
-      Number.isNaN(parsedDate.getTime()) ||
-      parsedDate.toISOString().slice(0, 10) !== travelDate
-    ) {
-      return NextResponse.json(
-        { message: "Invalid travel date" },
-        { status: 400 },
-      );
-    }
-
-    const today = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-
-    if (parsedDate < today) {
-      return NextResponse.json(
-        { message: "Travel date cannot be in the past" },
         { status: 400 },
       );
     }
@@ -76,6 +55,16 @@ export async function POST(request) {
       );
     }
 
+    if (!isValidFutureTripDate(travelPackage.tripDate)) {
+      return NextResponse.json(
+        { message: "This package does not have an upcoming trip date." },
+        { status: 400 },
+      );
+    }
+
+    const parsedDate = new Date(
+      `${travelPackage.tripDate}T00:00:00.000Z`,
+    );
     const pricePerTraveler = Number(travelPackage.price);
 
     if (!Number.isFinite(pricePerTraveler) || pricePerTraveler <= 0) {

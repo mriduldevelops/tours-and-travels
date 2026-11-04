@@ -26,31 +26,8 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  text-decoration: none;
   padding: 0 8px 38px;
-}
-
-.brandMark {
-  color: #d6b36a;
-  font-size: 32px;
-}
-
-.brand h2 {
-  font-size: 21px;
-  letter-spacing: 3px;
-  margin: 0;
-  font-weight: 700;
-}
-
-.brand h2 span {
-  color: #d6b36a;
-}
-
-.brand p {
-  font-size: 9px;
-  letter-spacing: 2.5px;
-  color: #a5b3bd;
-  margin: 6px 0 0;
 }
 
 .sidebarLabel {

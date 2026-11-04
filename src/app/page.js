@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import AuthNavActions from "@/components/AuthNavActions";
+import BrandLogo from "@/components/BrandLogo";
+import NavLinks from "@/components/NavLinks";
 
 const packages = [
   {
@@ -68,15 +70,13 @@ const destinations = [
 
 export default function Home() {
   const [destination, setDestination] = useState("");
-  const [travelDate, setTravelDate] = useState("");
-  const [travelers, setTravelers] = useState("2");
+  const [travelers, setTravelers] = useState("1");
 
   function handleSearch(e) {
     e.preventDefault();
 
     const params = new URLSearchParams({
       destination,
-      date: travelDate,
       travelers,
     });
 
@@ -88,24 +88,10 @@ export default function Home() {
       {/* Navbar */}
       <nav className="fixed top-0 z-50 w-full border-b border-white/20 bg-white/90 backdrop-blur-lg">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-10">
-          <a href="/" className="text-2xl font-bold tracking-tight">
-            <span className="text-[#c49a55]">W</span>anderlust
-            <span className="text-[#c49a55]">.</span>
-          </a>
+          <BrandLogo />
 
           <div className="hidden items-center gap-8 text-sm font-medium md:flex">
-            <a href="/" className="hover:text-[#c49a55]">
-              Home
-            </a>
-            <a href="/packages" className="hover:text-[#c49a55]">
-              Packages
-            </a>
-            <a href="#destinations" className="hover:text-[#c49a55]">
-              Destinations
-            </a>
-            <a href="#reviews" className="hover:text-[#c49a55]">
-              Reviews
-            </a>
+            <NavLinks />
           </div>
 
           <AuthNavActions variant="home" />
@@ -152,7 +138,7 @@ export default function Home() {
           {/* Search Box */}
           <form
             onSubmit={handleSearch}
-            className="mt-14 grid gap-4 rounded-2xl bg-white p-5 shadow-2xl md:grid-cols-4 md:items-end md:p-7"
+            className="mt-14 grid gap-4 rounded-2xl bg-white p-5 shadow-2xl md:grid-cols-3 md:items-end md:p-7"
           >
             <div>
               <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500">
@@ -163,18 +149,6 @@ export default function Home() {
                 placeholder="Where do you want to go?"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#c49a55]"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500">
-                Travel Date
-              </label>
-              <input
-                type="date"
-                value={travelDate}
-                onChange={(e) => setTravelDate(e.target.value)}
                 className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#c49a55]"
               />
             </div>
@@ -425,9 +399,7 @@ export default function Home() {
       <footer className="bg-[#111a28] px-5 py-12 text-white md:px-10">
         <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
           <div>
-            <a href="/" className="text-2xl font-bold">
-              <span className="text-[#c49a55]">W</span>anderlust.
-            </a>
+            <BrandLogo variant="light" />
             <p className="mt-4 max-w-sm text-sm leading-7 text-white/50">
               Discover extraordinary destinations and create unforgettable
               memories with our curated travel experiences.
@@ -455,7 +427,7 @@ export default function Home() {
           <div>
             <h3 className="font-bold">Contact Us</h3>
             <p className="mt-4 text-sm leading-7 text-white/50">
-              Email: support@wanderlust.com
+              Email: support@manchaletravelers.com
               <br />
               Phone: +91 98765 43210
               <br />
@@ -465,7 +437,7 @@ export default function Home() {
         </div>
 
         <div className="mx-auto mt-12 max-w-7xl border-t border-white/10 pt-6 text-center text-xs text-white/40">
-          © 2026 Wanderlust Travel. All rights reserved.
+          © 2026 Manchale Travelers. All rights reserved.
         </div>
       </footer>
     </main>

@@ -3,8 +3,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import AuthNavActions from "@/components/AuthNavActions";
+import BrandLogo from "@/components/BrandLogo";
+import NavLinks from "@/components/NavLinks";
+import TravelLoader from "@/components/TravelLoader";
+import { isValidFutureTripDate } from "@/lib/trip-date";
 
 const formatPrice = (price) => `₹${price.toLocaleString("en-IN")}`;
+const formatTripDate = (date) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
 export default function PackageDetailsPage() {
   const params = useParams();
@@ -12,8 +22,7 @@ export default function PackageDetailsPage() {
   const [packageLoading, setPackageLoading] = useState(true);
   const [packageError, setPackageError] = useState("");
   const [activeImage, setActiveImage] = useState(0);
-  const [travelDate, setTravelDate] = useState("");
-  const [travelers, setTravelers] = useState(2);
+  const [travelers, setTravelers] = useState(1);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -62,12 +71,7 @@ export default function PackageDetailsPage() {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const dateFromUrl = searchParams.get("date");
     const travelersFromUrl = searchParams.get("travelers");
-
-    if (dateFromUrl) {
-      setTravelDate(dateFromUrl);
-    }
 
     if (travelersFromUrl) {
       setTravelers(Math.max(1, Number(travelersFromUrl) || 1));
@@ -76,8 +80,8 @@ export default function PackageDetailsPage() {
 
   if (packageLoading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#faf9f6] px-5 text-gray-500">
-        Loading package...
+      <main className="flex min-h-screen items-center justify-center bg-[#faf9f6] px-5">
+        <TravelLoader label="Discovering this getaway" />
       </main>
     );
   }
@@ -120,36 +124,17 @@ export default function PackageDetailsPage() {
         "Comfortable transportation",
       ];
   const totalPrice = Number(selectedPackage.price || 0) * travelers;
-
-  const today = new Date();
-  const minimumDate = [
-    today.getFullYear(),
-    String(today.getMonth() + 1).padStart(2, "0"),
-    String(today.getDate()).padStart(2, "0"),
-  ].join("-");
+  const hasUpcomingTripDate = isValidFutureTripDate(selectedPackage.tripDate);
 
   return (
     <main className="min-h-screen bg-[#faf9f6] text-[#1b2638]">
       {/* Navbar */}
       <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-lg">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-10">
-          <a href="/" className="text-2xl font-bold tracking-tight">
-            <span className="text-[#c49a55]">W</span>anderlust.
-          </a>
+          <BrandLogo />
 
           <div className="hidden gap-8 text-sm font-medium md:flex">
-            <a href="/" className="hover:text-[#c49a55]">
-              Home
-            </a>
-            <a href="/packages" className="text-[#c49a55]">
-              Packages
-            </a>
-            <a href="/#destinations" className="hover:text-[#c49a55]">
-              Destinations
-            </a>
-            <a href="/#reviews" className="hover:text-[#c49a55]">
-              Reviews
-            </a>
+            <NavLinks />
           </div>
 
           <AuthNavActions variant="detail" />
@@ -347,16 +332,14 @@ export default function PackageDetailsPage() {
 
               <div className="mt-6 border-t border-gray-100 pt-6">
                 <label className="mb-2 block text-sm font-bold">
-                  Travel Date
+                  Trip Date
                 </label>
 
-                <input
-                  type="date"
-                  min={minimumDate}
-                  value={travelDate}
-                  onChange={(e) => setTravelDate(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-[#c49a55]"
-                />
+                <p className="rounded-xl border border-gray-200 bg-[#faf9f6] px-4 py-3">
+                  {hasUpcomingTripDate
+                    ? formatTripDate(selectedPackage.tripDate)
+                    : "No upcoming trip date scheduled"}
+                </p>
               </div>
 
               <div className="mt-5">
@@ -401,24 +384,22 @@ export default function PackageDetailsPage() {
               </div>
 
               {/* Book Button */}
-              <a
-                href={`/checkout?packageId=${selectedPackage._id}&date=${encodeURIComponent(
-                  travelDate,
-                )}&travelers=${travelers}`}
-                onClick={(e) => {
-                  if (!travelDate) {
-                    e.preventDefault();
-                    alert("Please select your travel date.");
-                  }
-                  if (travelDate && travelDate < minimumDate) {
-                    e.preventDefault();
-                    alert("Please select a future travel date.");
-                  }
-                }}
-                className="mt-6 block w-full rounded-full bg-[#1b2638] py-4 text-center font-bold text-white transition hover:bg-[#c49a55]"
-              >
-                Book Now →
-              </a>
+              {hasUpcomingTripDate ? (
+                <a
+                  href={`/checkout?packageId=${selectedPackage._id}&travelers=${travelers}`}
+                  className="mt-6 block w-full rounded-full bg-[#1b2638] py-4 text-center font-bold text-white transition hover:bg-[#c49a55]"
+                >
+                  Book Now →
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  disabled
+                  className="mt-6 block w-full cursor-not-allowed rounded-full bg-gray-300 py-4 text-center font-bold text-gray-600"
+                >
+                  Booking unavailable
+                </button>
+              )}
 
               <p className="mt-4 text-center text-xs text-gray-400">
                 Secure booking · Easy payment
@@ -447,9 +428,7 @@ export default function PackageDetailsPage() {
       <footer className="bg-[#111a28] px-5 py-10 text-white md:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
-            <a href="/" className="text-2xl font-bold">
-              <span className="text-[#c49a55]">W</span>anderlust.
-            </a>
+            <BrandLogo variant="light" />
 
             <div className="flex flex-wrap gap-6 text-sm text-white/50">
               <a href="/" className="hover:text-[#c49a55]">
@@ -468,7 +447,7 @@ export default function PackageDetailsPage() {
           </div>
 
           <div className="mt-8 border-t border-white/10 pt-6 text-center text-xs text-white/40">
-            © 2026 Wanderlust Travel. All rights reserved.
+            © 2026 Manchale Travelers. All rights reserved.
           </div>
         </div>
       </footer>
