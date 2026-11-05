@@ -7,6 +7,7 @@ import TravelLoader from "@/components/TravelLoader";
 function SuccessContent() {
   const searchParams = useSearchParams();
   const bookingId = searchParams.get("bookingId");
+  const paymentDeferred = searchParams.get("payment") === "deferred";
 
   return (
     <main
@@ -40,7 +41,7 @@ function SuccessContent() {
             fontWeight: "bold",
           }}
         >
-          PAYMENT CONFIRMED
+          {paymentDeferred ? "BOOKING CONFIRMED" : "PAYMENT CONFIRMED"}
         </p>
 
         <h1
@@ -50,12 +51,13 @@ function SuccessContent() {
             fontSize: "32px",
           }}
         >
-          Your Journey Awaits
+          {paymentDeferred ? "Your Place Is Reserved" : "Your Journey Awaits"}
         </h1>
 
         <p style={{ color: "#89877e", lineHeight: 1.7 }}>
-          Your payment was verified and your booking is confirmed. We look
-          forward to making your trip memorable.
+          {paymentDeferred
+            ? "Your booking is confirmed. No payment has been collected yet; the full amount is due later."
+            : "Your payment was verified and your booking is confirmed. We look forward to making your trip memorable."}
         </p>
 
         {bookingId && (

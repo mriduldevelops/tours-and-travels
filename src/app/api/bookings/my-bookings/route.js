@@ -14,7 +14,7 @@ export async function GET() {
     await connectDB();
 
     const bookings = await Booking.find({
-      user: user._id,
+      user: user.userId,
     })
       .sort({ createdAt: -1 })
       .lean();

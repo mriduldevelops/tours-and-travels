@@ -144,11 +144,13 @@ export default function MyBookingsPage() {
             <div className={styles.bookingBottom}>
               <span>Booking ID: {booking._id.slice(-8).toUpperCase()}</span>
 
-              {booking.paymentStatus !== "paid" && (
+              {booking.paymentStatus === "unpaid" ? (
+                <span className={styles.pendingNote}>Payment due later</span>
+              ) : booking.paymentStatus !== "paid" ? (
                 <span className={styles.pendingNote}>
                   Payment confirmation pending
                 </span>
-              )}
+              ) : null}
             </div>
           </article>
         ))}

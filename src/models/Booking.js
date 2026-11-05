@@ -56,8 +56,8 @@ const bookingSchema = new mongoose.Schema(
 
     razorpayOrderId: {
       type: String,
-      required: true,
       unique: true,
+      sparse: true,
     },
 
     razorpayPaymentId: {
@@ -67,7 +67,7 @@ const bookingSchema = new mongoose.Schema(
 
     paymentStatus: {
       type: String,
-      enum: ["created", "pending", "paid", "failed", "refunded"],
+      enum: ["created", "pending", "unpaid", "paid", "failed", "refunded"],
       default: "created",
     },
 
@@ -86,6 +86,17 @@ const bookingSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+const existingBookingModel = mongoose.models.Booking;
+const existingPaymentStatus = existingBookingModel?.schema.path("paymentStatus");
+
+if (
+  existingBookingModel &&
+  (existingBookingModel.schema.path("razorpayOrderId")?.isRequired ||
+    !existingPaymentStatus?.enumValues.includes("unpaid"))
+) {
+  mongoose.deleteModel("Booking");
+}
 
 const Booking =
   mongoose.models.Booking || mongoose.model("Booking", bookingSchema);

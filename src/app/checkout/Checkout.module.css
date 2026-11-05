@@ -304,6 +304,44 @@
   font-size: 19px;
 }
 
+.payLaterButton {
+  width: 100%;
+  border: 1px solid #c5a15c;
+  background: #ffffff;
+  color: #172c3c;
+  border-radius: 7px;
+  padding: 15px;
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.payLaterButton:hover {
+  background: #f6f0e2;
+}
+
+.payLaterButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.payLaterButton span {
+  font-size: 19px;
+}
+
+.payLaterNote {
+  color: #89877e;
+  font-size: 11px;
+  line-height: 1.6;
+  text-align: center;
+  margin: 12px 0 0;
+}
+
 .terms {
   color: #aaa397;
   font-size: 10px;

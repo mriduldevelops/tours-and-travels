@@ -32,6 +32,7 @@ function CheckoutContent() {
 
   const [loadingPackage, setLoadingPackage] = useState(true);
   const [paying, setPaying] = useState(false);
+  const [bookingLater, setBookingLater] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("error");
 
@@ -234,6 +235,69 @@ function CheckoutContent() {
     }
   }
 
+  async function handleBookLater() {
+    setMessage("");
+
+    if (!travelPackage || !packageId) {
+      showMessage("Package details are missing");
+      return;
+    }
+
+    if (!isValidFutureTripDate(travelPackage.tripDate)) {
+      showMessage("This package does not have an upcoming trip date.");
+      return;
+    }
+
+    if (
+      !Number.isInteger(Number(travelers)) ||
+      travelers < 1 ||
+      travelers > 20
+    ) {
+      showMessage("Please select between 1 and 20 travelers");
+      return;
+    }
+
+    setPaying(true);
+    setBookingLater(true);
+
+    try {
+      const response = await fetch("/api/bookings/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          packageId,
+          travelers: Number(travelers),
+          paymentMode: "pay_later",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push(
+            `/login?next=${encodeURIComponent(
+              `/checkout?packageId=${packageId}&travelers=${travelers}`,
+            )}`,
+          );
+          return;
+        }
+
+        throw new Error(data.message || "Unable to reserve this package");
+      }
+
+      router.push(
+        `/booking-success?bookingId=${data.bookingId}&payment=deferred`,
+      );
+    } catch (error) {
+      showMessage(error.message || "Unable to reserve this package");
+      setPaying(false);
+      setBookingLater(false);
+    }
+  }
+
   if (loadingPackage) {
     return (
       <div className={styles.loading}>
@@ -261,7 +325,10 @@ function CheckoutContent() {
       <div className={styles.pageIntro}>
         <p>YOUR JOURNEY BEGINS HERE</p>
         <h1>Complete Your Booking</h1>
-        <span>Review your travel details and continue to secure payment.</span>
+        <span>
+          Review your travel details, then pay now or reserve your trip for
+          payment later.
+        </span>
       </div>
 
       {message && (
@@ -394,7 +461,10 @@ function CheckoutContent() {
             disabled={paying || !isValidFutureTripDate(travelPackage.tripDate)}
           >
             {paying ? (
-              <TravelLoader compact label="Securing your payment..." />
+              <TravelLoader
+                compact
+                label={bookingLater ? "Reserving your trip..." : "Securing your payment..."}
+              />
             ) : (
               <>
                 Proceed to Payment
@@ -402,6 +472,19 @@ function CheckoutContent() {
               </>
             )}
           </button>
+
+          <button
+            className={styles.payLaterButton}
+            onClick={handleBookLater}
+            disabled={paying || !isValidFutureTripDate(travelPackage.tripDate)}
+          >
+            Book Now, Pay Later
+            <span>→</span>
+          </button>
+
+          <p className={styles.payLaterNote}>
+            Reserve your place now. The full booking amount will remain due.
+          </p>
 
           <p className={styles.terms}>
             By continuing, you agree to the booking terms and cancellation
