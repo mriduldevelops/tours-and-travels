@@ -1,5 +1,23 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Booking payments
+
+At checkout, travelers can pay immediately through Razorpay or confirm a booking
+and pay the full amount later. Pay-later bookings are confirmed with an
+`unpaid` payment status; no Razorpay order is created for them.
+
+The `razorpayOrderId` index must allow multiple bookings without an order ID.
+When deploying this schema change to a database with the previous non-sparse
+unique index, replace it once using MongoDB:
+
+```javascript
+db.bookings.dropIndex("razorpayOrderId_1");
+db.bookings.createIndex(
+  { razorpayOrderId: 1 },
+  { unique: true, sparse: true },
+);
+```
+
 ## Getting Started
 
 First, run the development server:

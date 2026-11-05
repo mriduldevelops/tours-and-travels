@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Package from "@/models/Package";
 import Booking from "@/models/Booking";
-import razorpay from "@/lib/razorpay";
 import { getCurrentUser } from "@/lib/auth";
 import { isValidFutureTripDate } from "@/lib/trip-date";
 
@@ -20,10 +19,18 @@ export async function POST(request) {
     const body = await request.json();
 
     const { packageId, travelers } = body;
+    const paymentMode = body.paymentMode || "pay_now";
 
     if (!packageId || !travelers) {
       return NextResponse.json(
         { message: "Package and travelers are required" },
+        { status: 400 },
+      );
+    }
+
+    if (!["pay_now", "pay_later"].includes(paymentMode)) {
+      return NextResponse.json(
+        { message: "Invalid payment mode" },
         { status: 400 },
       );
     }
@@ -84,22 +91,8 @@ export async function POST(request) {
       );
     }
 
-    const receipt = `bk_${Date.now()}_${Math.random()
-      .toString(36)
-      .slice(2, 8)}`;
-
-    const razorpayOrder = await razorpay.orders.create({
-      amount: amountInPaise,
-      currency: "INR",
-      receipt,
-      notes: {
-        userId: String(user._id),
-        packageId: String(travelPackage._id),
-      },
-    });
-
-    const booking = await Booking.create({
-      user: user._id,
+    const bookingDetails = {
+      user: user.userId,
       package: travelPackage._id,
       packageTitle: travelPackage.title,
       destination: travelPackage.destination,
@@ -108,6 +101,45 @@ export async function POST(request) {
       pricePerTraveler,
       totalAmount,
       currency: "INR",
+    };
+
+    if (paymentMode === "pay_later") {
+      const booking = await Booking.create({
+        ...bookingDetails,
+        paymentStatus: "unpaid",
+        bookingStatus: "confirmed",
+        paymentMethod: "Pay Later",
+      });
+
+      return NextResponse.json(
+        {
+          message: "Booking confirmed. Payment is due later.",
+          bookingId: String(booking._id),
+          bookingStatus: booking.bookingStatus,
+          paymentStatus: booking.paymentStatus,
+          totalAmount,
+        },
+        { status: 201 },
+      );
+    }
+
+    const receipt = `bk_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
+
+    const { default: razorpay } = await import("@/lib/razorpay");
+    const razorpayOrder = await razorpay.orders.create({
+      amount: amountInPaise,
+      currency: "INR",
+      receipt,
+      notes: {
+        userId: String(user.userId),
+        packageId: String(travelPackage._id),
+      },
+    });
+
+    const booking = await Booking.create({
+      ...bookingDetails,
       razorpayOrderId: razorpayOrder.id,
       paymentStatus: "created",
       bookingStatus: "pending",
@@ -127,10 +159,20 @@ export async function POST(request) {
       { status: 201 },
     );
   } catch (error) {
-    console.error("Create order error:", error);
+    console.error("Create booking error:", error);
+
+    if (error?.code === 11000 && error?.keyPattern?.razorpayOrderId) {
+      return NextResponse.json(
+        {
+          message:
+            "The database still has the old Razorpay order index. Update the razorpayOrderId index as described in the README, then retry.",
+        },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json(
-      { message: "Unable to create payment order" },
+      { message: "Unable to create booking" },
       { status: 500 },
     );
   }

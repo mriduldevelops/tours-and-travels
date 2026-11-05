@@ -67,7 +67,7 @@ export async function POST(request) {
 
     const booking = await Booking.findOne({
       _id: bookingId,
-      user: user._id,
+      user: user.userId,
       razorpayOrderId: razorpay_order_id,
     });
 
