@@ -152,7 +152,7 @@ export async function POST(request) {
         orderId: razorpayOrder.id,
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency,
-        keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        keyId: process.env.RAZORPAY_KEY_ID,
         packageTitle: travelPackage.title,
         totalAmount,
       },
