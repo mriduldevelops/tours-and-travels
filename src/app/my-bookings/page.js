@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import BrandLogo from "@/components/BrandLogo";
 import TravelLoader from "@/components/TravelLoader";
 import styles from "./MyBookings.module.css";
 
@@ -41,6 +42,16 @@ export default function MyBookingsPage() {
     });
   }
 
+  function formatDateTime(date) {
+    return new Date(date).toLocaleString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+
   function statusClass(status) {
     if (status === "paid" || status === "confirmed") {
       return styles.statusSuccess;
@@ -56,9 +67,7 @@ export default function MyBookingsPage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <a href="/" className={styles.brand}>
-          TRAVEL<span>É</span>
-        </a>
+        <BrandLogo />
 
         <a href="/packages" className={styles.backLink}>
           Explore Packages →
@@ -143,6 +152,7 @@ export default function MyBookingsPage() {
 
             <div className={styles.bookingBottom}>
               <span>Booking ID: {booking._id.slice(-8).toUpperCase()}</span>
+              <span>Booked on {formatDateTime(booking.createdAt)}</span>
 
               {booking.paymentStatus === "unpaid" ? (
                 <span className={styles.pendingNote}>Payment due later</span>

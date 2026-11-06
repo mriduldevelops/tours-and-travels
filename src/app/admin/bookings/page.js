@@ -24,6 +24,16 @@ function formatDate(value) {
   });
 }
 
+function formatDateTime(value) {
+  return new Date(value).toLocaleString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
 function formatAmount(value) {
   return `₹${Number(value).toLocaleString("en-IN")}`;
 }
@@ -317,7 +327,7 @@ export default function AdminBookingsPage() {
                           #{booking._id.slice(-8).toUpperCase()}
                         </strong>
                         <small className={listStyles.secondaryText}>
-                          {formatDate(booking.createdAt)}
+                          {formatDateTime(booking.createdAt)}
                         </small>
                       </td>
                       <td>

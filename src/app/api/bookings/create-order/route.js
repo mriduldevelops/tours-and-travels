@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Package from "@/models/Package";
-import Booking from "@/models/Booking";
+import Booking, { ensureBookingIndexes } from "@/models/Booking";
 import { getCurrentUser } from "@/lib/auth";
 import { isValidFutureTripDate } from "@/lib/trip-date";
 
@@ -90,6 +90,8 @@ export async function POST(request) {
         { status: 400 },
       );
     }
+
+    await ensureBookingIndexes();
 
     const bookingDetails = {
       user: user.userId,

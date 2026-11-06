@@ -7,8 +7,10 @@ and pay the full amount later. Pay-later bookings are confirmed with an
 `unpaid` payment status; no Razorpay order is created for them.
 
 The `razorpayOrderId` index must allow multiple bookings without an order ID.
-When deploying this schema change to a database with the previous non-sparse
-unique index, replace it once using MongoDB:
+The first booking request checks and repairs the legacy non-sparse unique
+index automatically. The application database user must have permission to
+list, create, and drop indexes. If that migration cannot run, replace the
+legacy index once using MongoDB:
 
 ```javascript
 db.bookings.dropIndex("razorpayOrderId_1");

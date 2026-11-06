@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: #f7f5ef;
   color: #172c3c;
-  padding: 0 7%;
+  padding: 0 7% 48px;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -12,19 +12,6 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #e8e2d7;
-}
-
-.brand {
-  font-family: Georgia, "Times New Roman", serif;
-  text-decoration: none;
-  font-size: 24px;
-  letter-spacing: 4px;
-  color: #172c3c;
-  font-weight: 700;
-}
-
-.brand span {
-  color: #c5a15c;
 }
 
 .backLink {
@@ -198,7 +185,7 @@
 
 @media (max-width: 700px) {
   .page {
-    padding: 0 15px;
+    padding: 0 15px 48px;
   }
 
   .detailsGrid {
