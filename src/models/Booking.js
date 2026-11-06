@@ -84,6 +84,7 @@ const bookingSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    autoIndex: false,
   },
 );
 
@@ -92,7 +93,8 @@ const existingPaymentStatus = existingBookingModel?.schema.path("paymentStatus")
 
 if (
   existingBookingModel &&
-  (existingBookingModel.schema.path("razorpayOrderId")?.isRequired ||
+  (existingBookingModel.schema.options.autoIndex !== false ||
+    existingBookingModel.schema.path("razorpayOrderId")?.isRequired ||
     !existingPaymentStatus?.enumValues.includes("unpaid"))
 ) {
   mongoose.deleteModel("Booking");
@@ -100,5 +102,67 @@ if (
 
 const Booking =
   mongoose.models.Booking || mongoose.model("Booking", bookingSchema);
+
+let bookingIndexesPromise;
+
+export async function ensureBookingIndexes() {
+  if (!bookingIndexesPromise) {
+    bookingIndexesPromise = (async () => {
+      let indexes;
+
+      try {
+        indexes = await Booking.collection.indexes();
+      } catch (error) {
+        if (error?.code !== 26) {
+          throw error;
+        }
+
+        indexes = [];
+      }
+
+      const orderIdIndex = indexes.find((index) => {
+        const keys = Object.keys(index.key || {});
+        return (
+          keys.length === 1 &&
+          keys[0] === "razorpayOrderId" &&
+          index.key.razorpayOrderId === 1
+        );
+      });
+
+      if (
+        orderIdIndex &&
+        !(orderIdIndex.unique === true && orderIdIndex.sparse === true)
+      ) {
+        try {
+          await Booking.collection.dropIndex(orderIdIndex.name);
+        } catch (error) {
+          if (error?.code !== 27) {
+            throw error;
+          }
+        }
+      }
+
+      await Promise.all([
+        Booking.collection.createIndex({ user: 1 }),
+        Booking.collection.createIndex(
+          { razorpayOrderId: 1 },
+          { unique: true, sparse: true },
+        ),
+      ]);
+    })();
+  }
+
+  const indexesPromise = bookingIndexesPromise;
+
+  try {
+    await indexesPromise;
+  } catch (error) {
+    if (bookingIndexesPromise === indexesPromise) {
+      bookingIndexesPromise = null;
+    }
+
+    throw error;
+  }
+}
 
 export default Booking;

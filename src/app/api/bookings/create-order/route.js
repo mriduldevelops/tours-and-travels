@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Package from "@/models/Package";
-import Booking from "@/models/Booking";
+import Booking, { ensureBookingIndexes } from "@/models/Booking";
 import { getCurrentUser } from "@/lib/auth";
 import { isValidFutureTripDate } from "@/lib/trip-date";
 
@@ -91,6 +91,8 @@ export async function POST(request) {
       );
     }
 
+    await ensureBookingIndexes();
+
     const bookingDetails = {
       user: user.userId,
       package: travelPackage._id,
@@ -152,7 +154,7 @@ export async function POST(request) {
         orderId: razorpayOrder.id,
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency,
-        keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        keyId: process.env.RAZORPAY_KEY_ID,
         packageTitle: travelPackage.title,
         totalAmount,
       },
