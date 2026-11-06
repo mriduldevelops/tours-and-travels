@@ -226,6 +226,10 @@ export default function AdminDashboard() {
             <span>▤</span> Bookings
           </a>
 
+          <a href="/admin/upcoming-tours" className={styles.navLink}>
+            <span>◷</span> Upcoming Tours
+          </a>
+
           <a href="/admin/customers" className={styles.navLink}>
             <span>♙</span> Customers
           </a>
