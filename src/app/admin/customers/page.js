@@ -85,6 +85,9 @@ export default function AdminCustomersPage() {
           <a href="/admin/bookings" className={dashboardStyles.navLink}>
             <span>▤</span> Bookings
           </a>
+          <a href="/admin/upcoming-tours" className={dashboardStyles.navLink}>
+            <span>◷</span> Upcoming Tours
+          </a>
           <a href="/admin/customers" className={dashboardStyles.navActive}>
             <span>♙</span> Customers
           </a>

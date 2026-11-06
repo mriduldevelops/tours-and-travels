@@ -1,0 +1,302 @@
+.tourList {
+  display: grid;
+  gap: 20px;
+}
+
+.tourCard {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #eee9df;
+  border-radius: 12px;
+}
+
+.tourHeader {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 25px;
+}
+
+.tourImage {
+  display: grid;
+  width: 88px;
+  height: 78px;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 9px;
+  background: #f1eadb;
+  color: #b08b42;
+  font-size: 25px;
+}
+
+.tourImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tourIdentity {
+  min-width: 0;
+  flex: 1;
+}
+
+.tourIdentity h2 {
+  margin: 0;
+  color: #203343;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.tourIdentity p {
+  margin: 7px 0 0;
+  color: #89877e;
+  font-size: 12px;
+}
+
+.tourCategory {
+  display: inline-block;
+  margin-top: 9px;
+  color: #aaa397;
+  font-size: 10px;
+}
+
+.tripStatus {
+  flex: 0 0 auto;
+  border-radius: 20px;
+  padding: 8px 11px;
+  background: #eaf5ed;
+  color: #39804e;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid #f0ede6;
+  border-bottom: 1px solid #f0ede6;
+}
+
+.metric {
+  min-width: 0;
+  padding: 18px 22px;
+}
+
+.metric + .metric {
+  border-left: 1px solid #f0ede6;
+}
+
+.metric span {
+  display: block;
+  color: #969184;
+  font-size: 10px;
+}
+
+.metric strong {
+  display: block;
+  margin-top: 8px;
+  color: #203343;
+  font-size: 18px;
+}
+
+.metric small {
+  display: block;
+  margin-top: 5px;
+  color: #aaa397;
+  font-size: 10px;
+}
+
+.paymentBar {
+  height: 4px;
+  margin-top: 11px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #f0ede6;
+}
+
+.paymentBar span {
+  height: 100%;
+  border-radius: inherit;
+  background: #68a477;
+}
+
+.bookingDetails {
+  padding: 0 25px;
+}
+
+.bookingDetails summary {
+  padding: 17px 0;
+  color: #455362;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+.bookingDetails summary span {
+  margin-left: 5px;
+  color: #aaa397;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.bookingTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 18px;
+}
+
+.bookingTable {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.bookingTable th {
+  padding: 12px 14px;
+  background: #faf9f6;
+  color: #969184;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-align: left;
+}
+
+.bookingTable td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #f0ede6;
+  color: #6f716f;
+  font-size: 11px;
+}
+
+.bookingTable td strong,
+.bookingTable td small {
+  display: block;
+}
+
+.bookingTable td strong {
+  color: #344655;
+  font-size: 11px;
+}
+
+.bookingTable td small {
+  margin-top: 4px;
+  color: #aaa397;
+  font-size: 10px;
+}
+
+.statusBadge {
+  display: inline-flex;
+  border-radius: 20px;
+  padding: 6px 9px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusSuccess {
+  background: #eaf5ed;
+  color: #39804e;
+}
+
+.statusPending {
+  background: #f8f1df;
+  color: #98762f;
+}
+
+.statusFailure {
+  background: #f5ece6;
+  color: #a44f42;
+}
+
+.bookingEmpty {
+  padding: 0 25px 20px;
+  color: #969184;
+  font-size: 12px;
+}
+
+.emptyTours {
+  padding: 48px 25px;
+  color: #969184;
+  text-align: center;
+}
+
+.emptyTours strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #344655;
+  font-size: 14px;
+}
+
+.bookingLink {
+  display: inline-block;
+  margin: 16px 25px 20px;
+  color: #947331;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.bookingLink:hover {
+  color: #172c3c;
+}
+
+@media (max-width: 800px) {
+  .tourHeader {
+    align-items: flex-start;
+    padding: 18px;
+  }
+
+  .tourImage {
+    width: 68px;
+    height: 64px;
+  }
+
+  .tourIdentity h2 {
+    font-size: 18px;
+  }
+
+  .tripStatus {
+    padding: 7px 9px;
+  }
+
+  .metricGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metric {
+    padding: 15px 18px;
+  }
+
+  .metric:nth-child(3) {
+    border-left: 0;
+    border-top: 1px solid #f0ede6;
+  }
+
+  .metric:nth-child(4) {
+    border-top: 1px solid #f0ede6;
+  }
+
+  .bookingDetails {
+    padding: 0 18px;
+  }
+
+  .bookingLink {
+    margin-left: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tourHeader {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .tripStatus {
+    margin-left: 80px;
+  }
+
+  .metric strong {
+    font-size: 16px;
+  }
+}
